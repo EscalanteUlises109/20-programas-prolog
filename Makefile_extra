@@ -1,0 +1,17 @@
+# Variables
+PROLOG_FILES_EXTRA = tiempo.pl notasm.pl distancia.pl Prestamo.pl Desc.pl Conversionmonedas.pl \
+                     Cali.pl Areas.pl temperaturapl Inve.pl Biblioteca.pl Hotel.pl CalcularMCD.pl \
+                     php.pl escala.pl velocidad.pl rgb.pl volumen.pl
+
+# Ejecuta todos los archivos .pl en PROLOG_FILES_EXTRA
+.PHONY: run
+run:
+	@for file in $(PROLOG_FILES_EXTRA); do \
+		echo "Ejecutando $$file..."; \
+		swipl -s $$file; \
+	done
+
+# Limpia cualquier archivo de salida o temporal si es necesario
+.PHONY: clean
+clean:
+	rm -f *.out
