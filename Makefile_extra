@@ -1,17 +1,39 @@
 # Variables
-PROLOG_FILES_EXTRA = tiempo.pl notasm.pl distancia.pl Prestamo.pl Desc.pl Conversionmonedas.pl \
-                     Cali.pl Areas.pl temperaturapl Inve.pl Biblioteca.pl Hotel.pl CalcularMCD.pl \
-                     php.pl escala.pl velocidad.pl rgb.pl volumen.pl
+PROLOG_FILES = Areas.pl Biblioteca.pl CalcularMCD.pl Cali.pl Conversionmonedas.pl \
+               Desc.pl Hotel.pl Inve.pl MakeFile.extra php.pl Prestamo.pl \
+               README.md distancia.pl escala.pl notasm.pl rgb.pl temperatura.pl \
+               tiempo.pl velocidad.pl volumen.pl
 
-# Ejecuta todos los archivos .pl en PROLOG_FILES_EXTRA
+# Ejecuta todos los archivos .pl
 .PHONY: run
 run:
-	@for file in $(PROLOG_FILES_EXTRA); do \
-		echo "Ejecutando $$file..."; \
-		swipl -s $$file; \
+	@for file in $(PROLOG_FILES); do \
+		if [ "$${file##*.}" = "pl" ]; then \
+			echo "Ejecutando $$file..."; \
+			swipl -s $$file -g "halt." || true; \
+		fi \
 	done
 
-# Limpia cualquier archivo de salida o temporal si es necesario
+# Ejecuta un archivo específico
+.PHONY: run-file
+run-file:
+	@if [ -z "$(FILE)" ]; then \
+		echo "Uso: make run-file FILE=nombre_archivo.pl"; \
+	else \
+		echo "Ejecutando $(FILE)..."; \
+		swipl -s $(FILE) -g "halt."; \
+	fi
+
+# Limpia cualquier archivo de salida o temporal
 .PHONY: clean
 clean:
 	rm -f *.out
+
+# Muestra ayuda
+.PHONY: help
+help:
+	@echo "Comandos disponibles:"
+	@echo "  make run              - Ejecuta todos los archivos .pl"
+	@echo "  make run-file FILE=x  - Ejecuta un archivo específico (ej: make run-file FILE=Areas.pl)"
+	@echo "  make clean            - Limpia archivos temporales"
+	@echo "  make help             - Muestra esta ayuda"
